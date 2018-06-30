@@ -30,32 +30,23 @@ class MyModel : public QObject {
     QML_WRITABLE_PROPERTY (QString,      name)
     QML_WRITABLE_PROPERTY (QString,      remark)
 
-    Q_PROPERTY (QQmlObjectListModelBase* submodel READ get_submodel CONSTANT)
-
+    Q_PROPERTY (QQmlObjectListModel<MySubmodel>* submodel READ submodel CONSTANT)
 
 public:
-    explicit MyModel (QObject * parent = NULL) : QObject (parent) {
+    explicit MyModel (QObject * parent = NULL) : QObject (parent) {        
         m_mainID  = -1;
         m_submodel = new QQmlObjectListModel<MySubmodel>(this, "subname", "subname");
     }
 
 public:
 
-    QQmlObjectListModelBase* get_submodel () {
+    QQmlObjectListModel<MySubmodel>* submodel() {
         return m_submodel;
-    }
-
-    void Submodel_Add(MySubmodel *sub) {
-        m_submodel->append(sub);
-    }
-
-    void Submodel_Clear() {
-        m_submodel->clear();
     }
 
 private:
 
-    QQmlObjectListModelBase *m_submodel;
+    QQmlObjectListModel<MySubmodel> *m_submodel;
 
 };
 
@@ -70,8 +61,9 @@ signals:
 public slots:
 
     void btnAddPage(void);
-    void btnAddListItem(int id);
     void btnClearAllPages(void);
+    void btnAddListItem(int id);
+    void btnUpdateListItem(int id);    
     void btnClearListItems(int id);
 
 private:
