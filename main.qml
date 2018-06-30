@@ -74,6 +74,13 @@ ApplicationWindow {
                             }
 
                             Button {
+                                text: "Update Test"
+                                onClicked: {
+                                    logic.btnUpdateListItem(model.mainID);
+                                }
+                            }
+
+                            Button {
                                 text: "Clear List"
                                 onClicked: {
                                     logic.btnClearListItems(model.mainID);
@@ -82,6 +89,7 @@ ApplicationWindow {
                         }
 
                         ListView {
+                            id: listViewSubModel
                             clip: true
                             Layout.fillHeight: true
                             Layout.fillWidth: true
