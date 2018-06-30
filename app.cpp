@@ -5,6 +5,8 @@
 App::App(QObject *parent) : QObject(parent)
 {
 
+    qRegisterMetaType<QQmlObjectListModel<MySubmodel>*>("QQmlObjectListModel<MySubmodel>*");
+
     counter = 0;
 
     testModel = new QQmlObjectListModel<MyModel>(this, "name", "name");
@@ -27,7 +29,18 @@ void App::btnClearAllPages(void) {
 void App::btnClearListItems(int id) {
     for (int z = 0; z<testModel->count(); z++) {
         if (testModel->at(z)->get_mainID() == id) {
-            testModel->at(z)->get_submodel()->clear();
+            testModel->at(z)->submodel()->clear();
+        }
+    }
+}
+
+void App::btnUpdateListItem(int id) {
+    for (int z = 0; z<testModel->count(); z++) {
+        if (testModel->at(z)->get_mainID() == id) {
+            if (testModel->at(z)->submodel()->count() > 2) {
+                // just update the second Item in the Submodel in case it exists:
+                testModel->at(z)->submodel()->at(1)->set_subname("Update TEST!");
+            }
         }
     }
 }
@@ -36,9 +49,9 @@ void App::btnAddListItem(int id) {
     for (int z = 0; z<testModel->count(); z++) {
         if (testModel->at(z)->get_mainID() == id) {
             MySubmodel *sub = new MySubmodel();
-            sub->set_subid(1);
-            sub->set_subname("SubName " + QString::number(testModel->at(z)->get_submodel()->count()));
-            testModel->at(z)->Submodel_Add(sub);
+            sub->set_subid(testModel->at(z)->submodel()->count() + 1);
+            sub->set_subname("SubName " + QString::number(testModel->at(z)->submodel()->count()));
+            testModel->at(z)->submodel()->append(sub);
         }
     }
 }
